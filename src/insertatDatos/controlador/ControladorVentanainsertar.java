@@ -1,9 +1,13 @@
+package insertatDatos.controlador;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
+import insertatDatos.vista.IngresarDatos;
+import insertatDatos.modelo.ConeccionBD;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
@@ -19,6 +23,7 @@ public class ControladorVentanainsertar extends WindowAdapter {
     private final IngresarDatos ventana;
     private static final String CONSULTA_MARCAS = "select NOMBRE from MARCA;";
     private static final String CONSULTA_PRO = "select MODELO from PROCESADOR;";
+    private static final String CONSULTA_ID = "select MAX(ID) from MOVILES;";
 
     public ControladorVentanainsertar(IngresarDatos vent) {
         ventana = vent;
@@ -30,7 +35,7 @@ public class ControladorVentanainsertar extends WindowAdapter {
         ResultSet resultado;
         try {
             ConeccionBD bd = new ConeccionBD();
-            //realizamos la consulta a la base de datos y guardamos los datos
+            //realizamos la consulta de las marcas a la base de datos y guardamos los datos
             resultado = bd.realizarConsulta(CONSULTA_MARCAS);
 
             //Limpiamos los combobox de las marcas
@@ -42,15 +47,21 @@ public class ControladorVentanainsertar extends WindowAdapter {
                 ventana.addMarca(resultado.getString("NOMBRE"));
             }
 
+            //realizamos la consulta del procesador a la base de datos y guardamos los datos
             resultado = bd.realizarConsulta(CONSULTA_PRO);
+
+            //Limpiamos los combobox del procesador
             ventana.limpiarItems(ventana.getCbProcesador());
+
             while (resultado.next()) {
-                //aniadimos el resultado de la consulta a los combobox de modelo
+                //aniadimos el resultado de la consulta a los combobox de procesador
                 ventana.addProcesador(resultado.getString("MODELO"));
             }
 
-            resultado = bd.realizarConsulta("select MAX(ID) from MOVILES;");
+            //realizamos una cosulta a la base de datos para obtener el ultimo ID usado
+            resultado = bd.realizarConsulta(CONSULTA_ID);
             while (resultado.next()) {
+                //ponemos el id ya configurado en el cuadro de texto ID
                 ventana.setTxtId(resultado.getInt(1) + 1);
             }
         } catch (SQLException ex) {

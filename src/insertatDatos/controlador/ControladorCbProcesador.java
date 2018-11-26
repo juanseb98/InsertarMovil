@@ -1,4 +1,6 @@
+package insertatDatos.controlador;
 
+import insertatDatos.vista.IngresarDatos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -11,11 +13,11 @@ import java.awt.event.ItemListener;
  *
  * @author sastian
  */
-class ControladorPro implements ItemListener {
+public class ControladorCbProcesador implements ItemListener {
 
     private IngresarDatos ventana;
 
-    public ControladorPro(IngresarDatos aThis) {
+    public ControladorCbProcesador(IngresarDatos aThis) {
         ventana = aThis;
     }
 

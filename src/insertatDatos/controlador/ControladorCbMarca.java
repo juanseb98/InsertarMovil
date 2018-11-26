@@ -1,9 +1,12 @@
+package insertatDatos.controlador;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
+import insertatDatos.vista.IngresarDatos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -11,11 +14,11 @@ import java.awt.event.ItemListener;
  *
  * @author sastian
  */
-public class ControladorCB implements ItemListener {
+public class ControladorCbMarca implements ItemListener {
 
     private IngresarDatos ventana;
 
-    public ControladorCB(IngresarDatos aThis) {
+    public ControladorCbMarca(IngresarDatos aThis) {
         ventana = aThis;
     }
 

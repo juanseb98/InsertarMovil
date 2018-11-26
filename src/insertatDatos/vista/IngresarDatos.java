@@ -1,9 +1,14 @@
+package insertatDatos.vista;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+import insertatDatos.controlador.ControladorAniadir;
+import insertatDatos.controlador.ControladorVentanainsertar;
+import insertatDatos.controlador.ControladorCbMarca;
+import insertatDatos.controlador.ControladorCbProcesador;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 
@@ -23,9 +28,9 @@ public class IngresarDatos extends javax.swing.JFrame {
         this.addWindowListener(new ControladorVentanainsertar(this));
         marca = new String();
         procesador = new String();
-        ControladorCB ctr = new ControladorCB(this);
+        ControladorCbMarca ctr = new ControladorCbMarca(this);
         jComboBoxMarca.addItemListener(ctr);
-        ControladorPro ctr2 = new ControladorPro(this);
+        ControladorCbProcesador ctr2 = new ControladorCbProcesador(this);
         cbProcesador.addItemListener(ctr2);
         ControladorAniadir ctr1 = new ControladorAniadir(this);
         controlador(ctr1);
@@ -34,6 +39,8 @@ public class IngresarDatos extends javax.swing.JFrame {
     public void controlador(ActionListener ctr) {
         btInsertar.addActionListener(ctr);
         btInsertar.setActionCommand("insertar");
+        btNewProcesador.addActionListener(ctr);
+        btNewProcesador.setActionCommand("procesador");
     }
 
     public void setMarca(String marca) {
@@ -447,7 +454,7 @@ public class IngresarDatos extends javax.swing.JFrame {
         cbProcesador.addItem(pro);
     }
 
-    void setProcesador(String toString) {
+    public void setProcesador(String toString) {
         procesador = toString;
     }
 }
