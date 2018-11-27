@@ -5,10 +5,9 @@ package insertatDatos.modelo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -57,6 +56,10 @@ public class ConeccionBD {
         } catch (SQLException ex) {
             Logger.getLogger(ConeccionBD.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public PreparedStatement getPrepareStament(String prepareStament) throws SQLException {
+        return conexion.prepareStatement(prepareStament);
     }
 
 }

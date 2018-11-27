@@ -81,16 +81,22 @@ public class IngresarDatos extends javax.swing.JFrame {
         return txtAlmacenamiento.getText().toString();
     }
 
-    public int getTxtBateria() {
-        return Integer.parseInt(txtBateria.getText());
+//    public int getTxtBateria() {
+//        return Integer.parseInt(txtBateria.getText());
+//    }
+    public String getTxtBateria() {
+        return txtBateria.getText().toString();
     }
 
     public String getTxtFoto() {
         return txtFoto.getText().toString();
     }
 
-    public int getTxtId() {
-        return Integer.parseInt(txtId.getText());
+//    public int getTxtId() {
+//        return Integer.parseInt(txtId.getText());
+//    }
+    public String getTxtId() {
+        return txtId.getText().toString();
     }
 
     public void setTxtId(int id) {
@@ -101,27 +107,36 @@ public class IngresarDatos extends javax.swing.JFrame {
         return txtNombre.getText().toString();
     }
 
-    public int getTxtPeso() {
-        return Integer.parseInt(txtPeso.getText());
+//    public int getTxtPeso() {
+//        return Integer.parseInt(txtPeso.getText());
+//    }
+    public String getTxtPeso() {
+        return txtPeso.getText().toString();
     }
 
-    public Double getTxtPulgadas() {
-        return Double.parseDouble(txtPulgadas.getText());
+//    public Double getTxtPulgadas() {
+//        return Double.parseDouble(txtPulgadas.getText());
+//    }
+    public String getTxtPulgadas() {
+        return txtPulgadas.getText().toString();
     }
 
-    public String getTxtREsolucion() {
+    public String getTxtResolucion() {
         return txtREsolucion.getText().toString();
     }
 
-    public int getTxtRam() {
-        return Integer.parseInt(txtRam.getText());
+//    public int getTxtRam() {
+//        return Integer.parseInt(txtRam.getText());
+//    }
+    public String getTxtRam() {
+        return txtRam.getText().toString();
     }
 
     public String getTxtTamanio() {
         return txtTamanio.getText().toString();
     }
 
-    public String getjComboBox2() {
+    public String getcbProcesador() {
         return procesador;
     }
 
