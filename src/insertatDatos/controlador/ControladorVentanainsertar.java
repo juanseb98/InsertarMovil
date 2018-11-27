@@ -5,7 +5,6 @@ package insertatDatos.controlador;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import insertatDatos.vista.IngresarDatos;
 import insertatDatos.modelo.ConeccionBD;
 import java.awt.event.WindowAdapter;

@@ -14,8 +14,6 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -31,6 +29,8 @@ public class ControladorAniadir implements ActionListener {
     private int ID, MARCA, PESO, ALMACENAMIENTO, RAM, PROCESADOR, HUELLA, ACELEROMETRO, GIROSCOPIO, BATERIA;
     private double PULGADAS;
 
+    private static final String CONSULTA_ID = "select MAX(ID) from MOVILES;";
+
     public ControladorAniadir(IngresarDatos ventana) {
         bd = new ConeccionBD();
         this.ventana = ventana;
@@ -42,14 +42,19 @@ public class ControladorAniadir implements ActionListener {
 
         switch (boton) {
             case "insertar":
-                obtenerDatos();
-                insertar();
+                if (obtenerDatos()) {
+                    insertar();
+                    actualizarID();
+                }
+
 //                insertarIntert();
                 break;
             case "procesador":
                 JDialog ventanaProcesador = new JDialog(ventana, "Añadir Procesador");
                 IngresarProcesador panel = new IngresarProcesador();
                 ventanaProcesador.addWindowListener(new ControladorVentanainsertarProcesador(panel));
+                ControladorAniadirProcesador ctr = new ControladorAniadirProcesador(panel);
+                panel.controlador(ctr);
                 ventanaProcesador.add(panel);
 
                 ventanaProcesador.pack();
@@ -79,7 +84,7 @@ public class ControladorAniadir implements ActionListener {
             ResultSet resultado = bd.realizarConsulta("select ID_MARCA from MARCA where NOMBRE='" + marca + "';");
             return resultado.getInt("ID_MARCA");
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -93,7 +98,7 @@ public class ControladorAniadir implements ActionListener {
             }
             return id;
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -130,7 +135,8 @@ public class ControladorAniadir implements ActionListener {
         }
     }
 
-    private void obtenerDatos() {
+    private boolean obtenerDatos() {
+        boolean datosCorreecto = false;
         try {
 
             ID = Integer.parseInt(ventana.getTxtId());
@@ -148,11 +154,23 @@ public class ControladorAniadir implements ActionListener {
             ACELEROMETRO = ventana.getCbAcelerometro();
             GIROSCOPIO = ventana.getCbGiroscopio();
             BATERIA = Integer.parseInt(ventana.getTxtBateria());
+            datosCorreecto = true;
 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             JOptionPane.showMessageDialog(ventana, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return datosCorreecto;
+    }
 
+    private void actualizarID() {
+        try {
+            ResultSet resultado = bd.realizarConsulta(CONSULTA_ID);
+            if (resultado.next()) {
+                ventana.setTxtId(resultado.getInt(1) + 1);
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
