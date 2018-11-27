@@ -31,7 +31,6 @@ public class ControladorVentanainsertar extends WindowAdapter {
     @Override
     public void windowOpened(WindowEvent e) {
 
-        ResultSet resultado;
         try {
             ConeccionBD bd = new ConeccionBD();
             consultarMarcas(bd);
@@ -53,6 +52,7 @@ public class ControladorVentanainsertar extends WindowAdapter {
             //ponemos el id ya configurado en el cuadro de texto ID
             ventana.setTxtId(resultado.getInt(1) + 1);
         }
+        resultado.close();
     }
 
     public void iniciarProcesadores(ConeccionBD bd) throws SQLException {
@@ -65,6 +65,7 @@ public class ControladorVentanainsertar extends WindowAdapter {
             //aniadimos el resultado de la consulta a los combobox de procesador
             ventana.addProcesador(resultado.getString("MODELO"));
         }
+        resultado.close();
     }
 
     private void consultarMarcas(ConeccionBD bd) throws SQLException {
@@ -78,5 +79,6 @@ public class ControladorVentanainsertar extends WindowAdapter {
             //aniadimos el resultado de la consulta a los combobox de modelo
             ventana.addMarca(resultado.getString("NOMBRE"));
         }
+        resultado.close();
     }
 }

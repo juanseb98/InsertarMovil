@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package insertarDatos.controlador.procesador;
+package insertarDatos.controlador.marca;
 
 import insertarDatos.modelo.ConeccionBD;
-import insertarDatos.vista.IngresarProcesador;
+import insertarDatos.vista.IngresarMarca;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
@@ -18,17 +18,16 @@ import javax.swing.JOptionPane;
  *
  * @author sastian
  */
-public class ControladorAniadirProcesador implements ActionListener {
+public class ControladorAniadirMarca implements ActionListener {
 
-    private String MODELO, TIPO;
+    private String NOMBRE;
     private int ID;
-    private double FRECUANCIA;
 
     private ConeccionBD bd;
-    private IngresarProcesador panel;
-    private static final String CONSULTA_ID = "select MAX(ID_PROCESADOR) from PROCESADOR;";
+    private IngresarMarca panel;
+    private static final String CONSULTA_ID = "select MAX(ID_MARCA) from MARCA;";
 
-    public ControladorAniadirProcesador(IngresarProcesador panel) {
+    public ControladorAniadirMarca(IngresarMarca panel) {
         bd = new ConeccionBD();
         this.panel = panel;
     }
@@ -38,14 +37,14 @@ public class ControladorAniadirProcesador implements ActionListener {
 
         try {
             if (insertar()) {
-                JOptionPane.showMessageDialog(panel, "Se ha añadido Procesador correctamente", "Añadido", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(panel, "Se ha añadido marca correctamente", "Añadido", JOptionPane.INFORMATION_MESSAGE);
                 actualizarID();
                 panel.limpiar();
                 panel.cerrarVentana();
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(panel, "No se ha podido insertar Procesador", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, "No se ha podido insertar la nueva marca", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -62,14 +61,12 @@ public class ControladorAniadirProcesador implements ActionListener {
 
     private boolean insertar() throws SQLException {
         boolean correcto = false;
-        String prepareInst = "INSERT INTO PROCESADOR(ID_PROCESADOR,MODELO,TIPO,FRECUENCIA) VALUES( ?,  ?,  ?,  ?);";
+        String prepareInst = "INSERT INTO MARCA(ID_MARCA,NOMBRE) VALUES( ?,  ?);";
         if (obtenerDatos()) {
             PreparedStatement prepareStament = bd.getPrepareStament(prepareInst);
 
             prepareStament.setInt(1, ID);
-            prepareStament.setString(2, MODELO);
-            prepareStament.setString(3, TIPO);
-            prepareStament.setDouble(4, FRECUANCIA);
+            prepareStament.setString(2, NOMBRE);
 
             prepareStament.executeUpdate();
             prepareStament.close();
@@ -82,12 +79,8 @@ public class ControladorAniadirProcesador implements ActionListener {
         boolean datosCorrecto = false;
         try {
             ID = Integer.parseInt(panel.getTxtId());
-            MODELO = panel.getTxtModelo();
-            TIPO = panel.getTxtTipo();
-            FRECUANCIA = Double.parseDouble(panel.getTxtFrecuencia());
+            NOMBRE = panel.getTxtMarca();
             datosCorrecto = true;
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(panel, "La frecuencia es un numero", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(panel, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
         }

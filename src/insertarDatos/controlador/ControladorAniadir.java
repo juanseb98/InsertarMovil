@@ -5,12 +5,14 @@ package insertarDatos.controlador;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import insertarDatos.controlador.marca.ControladorAniadirMarca;
+import insertarDatos.controlador.marca.ControladorVentanainsertarMarca;
 import insertarDatos.controlador.procesador.ControladorAniadirProcesador;
 import insertarDatos.controlador.procesador.ControladorVentanainsertarProcesador;
 import insertarDatos.vista.IngresarDatos;
 import insertarDatos.modelo.ConeccionBD;
+import insertarDatos.vista.IngresarMarca;
 import insertarDatos.vista.IngresarProcesador;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
@@ -29,11 +31,12 @@ public class ControladorAniadir implements ActionListener {
     private IngresarDatos ventana;
 
     private static final String CONSULTA_PRO = "select MODELO from PROCESADOR;";
+    private static final String CONSULTA_ID = "select MAX(ID) from MOVILES;";
+    private static final String CONSULTA_MARCA = "select NOMBRE from MARCA;";
+
     private String NOMBRE, FOTO, TAMANNO, RESOLUCION;
     private int ID, MARCA, PESO, ALMACENAMIENTO, RAM, PROCESADOR, HUELLA, ACELEROMETRO, GIROSCOPIO, BATERIA;
     private double PULGADAS;
-
-    private static final String CONSULTA_ID = "select MAX(ID) from MOVILES;";
 
     public ControladorAniadir(IngresarDatos ventana) {
         bd = new ConeccionBD();
@@ -67,8 +70,35 @@ public class ControladorAniadir implements ActionListener {
                 ventanaProcesador.setModal(true);
                 ventanaProcesador.setVisible(true);
                 break;
+            case "marca":
+                JDialog ventanaMarca = new JDialog(ventana, "Añadir Marca");
+                IngresarMarca p = new IngresarMarca(ventanaMarca);
+                ControladorAniadirMarca ctrMarca = new ControladorAniadirMarca(p);
+                ventanaMarca.addWindowListener(new ControladorVentanainsertarMarca(p, this));
+
+                p.controlador(ctrMarca);
+
+                ventanaMarca.add(p);
+
+                ventanaMarca.pack();
+                ventanaMarca.setModal(true);
+                ventanaMarca.setVisible(true);
+                break;
         }
 
+    }
+
+    public void iniciarMarca(ConeccionBD bd) throws SQLException {
+        ResultSet resultado;
+        //realizamos la consulta del procesador a la base de datos y guardamos los datos
+        resultado = bd.realizarConsulta(CONSULTA_MARCA);
+        //Limpiamos los combobox del procesador
+        ventana.limpiarItems(ventana.getCbMarca());
+        while (resultado.next()) {
+            //aniadimos el resultado de la consulta a los combobox de procesador
+            ventana.addMarca(resultado.getString("NOMBRE"));
+        }
+        resultado.close();
     }
 
     public void iniciarProcesadores(ConeccionBD bd) throws SQLException {
@@ -81,16 +111,19 @@ public class ControladorAniadir implements ActionListener {
             //aniadimos el resultado de la consulta a los combobox de procesador
             ventana.addProcesador(resultado.getString("MODELO"));
         }
+        resultado.close();
     }
 
     private int obtenerIdMarca(String marca) {
+        int id = 0;
         try {
             ResultSet resultado = bd.realizarConsulta("select ID_MARCA from MARCA where NOMBRE='" + marca + "';");
-            return resultado.getInt("ID_MARCA");
+            id = resultado.getInt("ID_MARCA");
+            resultado.close();
         } catch (SQLException ex) {
             //Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return 0;
+        return id;
     }
 
     private int obtenerIdProcesador(String procesador) {
@@ -100,6 +133,7 @@ public class ControladorAniadir implements ActionListener {
             while (resultado.next()) {
                 id = resultado.getInt("ID_PROCESADOR");
             }
+            resultado.close();
             return id;
         } catch (SQLException ex) {
             //Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,6 +206,7 @@ public class ControladorAniadir implements ActionListener {
             if (resultado.next()) {
                 ventana.setTxtId(resultado.getInt(1) + 1);
             }
+            resultado.close();
         } catch (SQLException ex) {
             //Logger.getLogger(ControladorAniadir.class.getName()).log(Level.SEVERE, null, ex);
         }

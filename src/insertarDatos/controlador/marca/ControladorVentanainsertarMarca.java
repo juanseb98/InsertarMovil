@@ -1,13 +1,8 @@
-package insertarDatos.controlador.procesador;
+package insertarDatos.controlador.marca;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import insertarDatos.controlador.ControladorAniadir;
 import insertarDatos.modelo.ConeccionBD;
-import insertarDatos.vista.IngresarProcesador;
+import insertarDatos.vista.IngresarMarca;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
@@ -18,14 +13,14 @@ import javax.swing.JOptionPane;
  *
  * @author sastian
  */
-public class ControladorVentanainsertarProcesador extends WindowAdapter {
+public class ControladorVentanainsertarMarca extends WindowAdapter {
 
-    private final IngresarProcesador ventana;
+    private final IngresarMarca ventana;
     private final ControladorAniadir controlador;
     private ConeccionBD bd;
-    private static final String CONSULTA_ID = "select MAX(ID_PROCESADOR) from PROCESADOR;";
+    private static final String CONSULTA_ID = "select MAX(ID_MARCA) from MARCA;";
 
-    public ControladorVentanainsertarProcesador(IngresarProcesador vent, ControladorAniadir ctr) {
+    public ControladorVentanainsertarMarca(IngresarMarca vent, ControladorAniadir ctr) {
         ventana = vent;
         controlador = ctr;
     }
@@ -43,7 +38,6 @@ public class ControladorVentanainsertarProcesador extends WindowAdapter {
                 ventana.setTxtId(resultado.getInt(1) + 1);
             }
             resultado.close();
-
         } catch (SQLException ex) {
             //En caso de no poder realizar la consulta saltara un mensaje informandonos de ello
             JOptionPane.showMessageDialog(null, "No se pudo realizar la consulta correctamente", "Error Al realizar consulta", JOptionPane.ERROR_MESSAGE);
@@ -53,7 +47,7 @@ public class ControladorVentanainsertarProcesador extends WindowAdapter {
     @Override
     public void windowClosed(WindowEvent e) {
         try {
-            controlador.iniciarProcesadores(bd);
+            controlador.iniciarMarca(bd);
         } catch (SQLException ex) {
             //Logger.getLogger(ControladorVentanainsertarProcesador.class.getName()).log(Level.SEVERE, null, ex);
         }
