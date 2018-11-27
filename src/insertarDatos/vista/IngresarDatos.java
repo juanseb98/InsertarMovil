@@ -1,18 +1,15 @@
-package insertatDatos.vista;
+package insertarDatos.vista;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import insertatDatos.controlador.ControladorAniadir;
-import insertatDatos.controlador.ControladorVentanainsertar;
-import insertatDatos.controlador.ControladorCbMarca;
-import insertatDatos.controlador.ControladorCbProcesador;
+import insertarDatos.controlador.ControladorAniadir;
+import insertarDatos.controlador.ControladorVentanainsertar;
+import insertarDatos.controlador.ControladorCbMarca;
+import insertarDatos.controlador.ControladorCbProcesador;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 
 /**
+ * Pantalla encargada de gestionar la base de datos añadiendo nuevo movil y
+ * teniendo como funciones adicionales añadir nuevos procesadores y marcas
  *
  * @author sastian
  */
@@ -25,34 +22,57 @@ public class IngresarDatos extends javax.swing.JFrame {
      */
     public IngresarDatos() {
         initComponents();
-        txtId.setEnabled(false);
-
-        this.addWindowListener(new ControladorVentanainsertar(this));
         marca = new String();
         procesador = new String();
+
+        //configuramos la ventana para que aparezca en el centro de nuestra pantalla y le añadimos un controlador
+        this.setLocationRelativeTo(null);
+        this.addWindowListener(new ControladorVentanainsertar(this));
+
+        //desactivamos el textfield del id para que no sea modificable
+        txtId.setEnabled(false);
+
+        //Creamos el controlador del combobox de marcas y se lo añadimos
         ControladorCbMarca ctr = new ControladorCbMarca(this);
         jComboBoxMarca.addItemListener(ctr);
+
+        //Creamos el controlador del combobox de procesadores y se lo añadimos
         ControladorCbProcesador ctr2 = new ControladorCbProcesador(this);
         cbProcesador.addItemListener(ctr2);
-        ControladorAniadir ctr1 = new ControladorAniadir(this);
-        controlador(ctr1);
+
+        //Creamos el controlador de los componentes de nuestra ventana y lo añadimos
+        ControladorAniadir controladorComponentes = new ControladorAniadir(this);
+        controlador(controladorComponentes);
     }
 
+    /**
+     * Metodo que añade el controlador a los componentes de la pantalla
+     *
+     * @param ctr controlador que escuchara las acciones de los botones
+     */
     public void controlador(ActionListener ctr) {
         btInsertar.addActionListener(ctr);
         btInsertar.setActionCommand("insertar");
         btNewProcesador.addActionListener(ctr);
         btNewProcesador.setActionCommand("procesador");
+        btNewMarca.addActionListener(ctr);
+        btNewMarca.setActionCommand("marca");
     }
 
+//<---- Setters ---->
     public void setMarca(String marca) {
         this.marca = marca;
     }
 
-    public String getMarca() {
-        return marca;
+    public void setTxtId(int id) {
+        txtId.setText(String.valueOf(id));
     }
 
+    public void setProcesador(String toString) {
+        procesador = toString;
+    }
+
+//<---- Getters ---->
     public int getCbAcelerometro() {
         int ret = 0;
         if (cbAcelerometro.isSelected()) {
@@ -81,9 +101,6 @@ public class IngresarDatos extends javax.swing.JFrame {
         return txtAlmacenamiento.getText().toString();
     }
 
-//    public int getTxtBateria() {
-//        return Integer.parseInt(txtBateria.getText());
-//    }
     public String getTxtBateria() {
         return txtBateria.getText().toString();
     }
@@ -92,31 +109,18 @@ public class IngresarDatos extends javax.swing.JFrame {
         return txtFoto.getText().toString();
     }
 
-//    public int getTxtId() {
-//        return Integer.parseInt(txtId.getText());
-//    }
     public String getTxtId() {
         return txtId.getText().toString();
-    }
-
-    public void setTxtId(int id) {
-        txtId.setText(String.valueOf(id));
     }
 
     public String getTxtNombre() {
         return txtNombre.getText().toString();
     }
 
-//    public int getTxtPeso() {
-//        return Integer.parseInt(txtPeso.getText());
-//    }
     public String getTxtPeso() {
         return txtPeso.getText().toString();
     }
 
-//    public Double getTxtPulgadas() {
-//        return Double.parseDouble(txtPulgadas.getText());
-//    }
     public String getTxtPulgadas() {
         return txtPulgadas.getText().toString();
     }
@@ -125,9 +129,6 @@ public class IngresarDatos extends javax.swing.JFrame {
         return txtREsolucion.getText().toString();
     }
 
-//    public int getTxtRam() {
-//        return Integer.parseInt(txtRam.getText());
-//    }
     public String getTxtRam() {
         return txtRam.getText().toString();
     }
@@ -136,15 +137,61 @@ public class IngresarDatos extends javax.swing.JFrame {
         return txtTamanio.getText().toString();
     }
 
+    public JComboBox getCbMarca() {
+        return jComboBoxMarca;
+    }
+
+    public JComboBox getCbProcesador() {
+        return cbProcesador;
+    }
+
+    /**
+     * Devuelve el nombre del procesador seleccionado
+     *
+     * @return String con el nombre del procesador
+     */
     public String getcbProcesador() {
         return procesador;
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * Devuelve el nombre de la marca
+     *
+     * @return String con la marca
      */
+    public String getMarca() {
+        return marca;
+    }
+
+//<---- Metodos ---->
+    /**
+     * Metodo encargado de eliminar todos los items de un combobox que se le
+     * pasa por parametro
+     *
+     * @param cb combobox que se quiere limpiar
+     */
+    public void limpiarItems(JComboBox cb) {
+        cb.removeAllItems();
+    }
+
+    /**
+     * Metodo encargado de añadir nuevos al combobox marca
+     *
+     * @param mar nombre de la marca
+     */
+    public void addMarca(String mar) {
+        jComboBoxMarca.addItem(mar);
+    }
+
+    /**
+     * Metodo encargado de añadir nuevo item al combobox del procesador
+     *
+     * @param pro nombre del procesador
+     */
+    public void addProcesador(String pro) {
+        cbProcesador.addItem(pro);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -181,6 +228,7 @@ public class IngresarDatos extends javax.swing.JFrame {
         txtBateria = new javax.swing.JTextField();
         btInsertar = new javax.swing.JButton();
         btNewProcesador = new javax.swing.JButton();
+        btNewMarca = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -218,9 +266,11 @@ public class IngresarDatos extends javax.swing.JFrame {
 
         cbProcesador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        btInsertar.setText("añadir");
+        btInsertar.setText("Añadir nuevo movil");
 
-        btNewProcesador.setText("nuevo procesador");
+        btNewProcesador.setText("Nuevo procesador");
+
+        btNewMarca.setText("Nueva marca");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -230,78 +280,75 @@ public class IngresarDatos extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(18, 18, 18)
-                                .addComponent(cbAcelerometro))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(18, 18, 18)
-                                .addComponent(cbHuella))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtRam, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel14))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbGiroscopio)
-                                    .addComponent(txtBateria, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(btInsertar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbProcesador, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btNewProcesador)))
-                        .addGap(0, 80, Short.MAX_VALUE))
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbProcesador, 0, 267, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btNewProcesador))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtAlmacenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabeld))
+                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtAlmacenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jComboBoxMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(44, 44, 44)
+                                .addComponent(btNewMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabeld))
-                                .addGap(48, 48, 48)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(34, 34, 34)
+                                .addComponent(txtPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel3))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(33, 33, 33)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtTamanio, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(34, 34, 34)
-                                        .addComponent(txtPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, 0)
-                                        .addComponent(txtREsolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtPulgadas, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(135, Short.MAX_VALUE))))
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTamanio, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtREsolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPulgadas, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbAcelerometro))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbHuella))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtRam, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbGiroscopio)
+                            .addComponent(txtBateria, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(165, 165, 165))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,7 +360,8 @@ public class IngresarDatos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btNewMarca))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -338,7 +386,7 @@ public class IngresarDatos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtREsolucion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtAlmacenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -376,14 +424,11 @@ public class IngresarDatos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * Lanzador de la ventana
+     *
+     * @param args
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -412,6 +457,7 @@ public class IngresarDatos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btInsertar;
+    private javax.swing.JButton btNewMarca;
     private javax.swing.JButton btNewProcesador;
     private javax.swing.JCheckBox cbAcelerometro;
     private javax.swing.JCheckBox cbGiroscopio;
@@ -445,27 +491,4 @@ public class IngresarDatos extends javax.swing.JFrame {
     private javax.swing.JTextField txtTamanio;
     // End of variables declaration//GEN-END:variables
 
-    public void addMarca(String string) {
-        jComboBoxMarca.addItem(string);
-    }
-
-    public JComboBox getCbMarca() {
-        return jComboBoxMarca;
-    }
-
-    public void limpiarItems(JComboBox cb) {
-        cb.removeAllItems();
-    }
-
-    public JComboBox getCbProcesador() {
-        return cbProcesador;
-    }
-
-    public void addProcesador(String pro) {
-        cbProcesador.addItem(pro);
-    }
-
-    public void setProcesador(String toString) {
-        procesador = toString;
-    }
 }

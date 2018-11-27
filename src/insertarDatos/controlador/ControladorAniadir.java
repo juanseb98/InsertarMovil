@@ -1,13 +1,15 @@
-package insertatDatos.controlador;
+package insertarDatos.controlador;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import insertatDatos.vista.IngresarDatos;
-import insertatDatos.modelo.ConeccionBD;
-import insertatDatos.vista.IngresarProcesador;
+import insertarDatos.controlador.procesador.ControladorAniadirProcesador;
+import insertarDatos.controlador.procesador.ControladorVentanainsertarProcesador;
+import insertarDatos.vista.IngresarDatos;
+import insertarDatos.modelo.ConeccionBD;
+import insertarDatos.vista.IngresarProcesador;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +27,8 @@ public class ControladorAniadir implements ActionListener {
 
     private ConeccionBD bd;
     private IngresarDatos ventana;
+
+    private static final String CONSULTA_PRO = "select MODELO from PROCESADOR;";
     private String NOMBRE, FOTO, TAMANNO, RESOLUCION;
     private int ID, MARCA, PESO, ALMACENAMIENTO, RAM, PROCESADOR, HUELLA, ACELEROMETRO, GIROSCOPIO, BATERIA;
     private double PULGADAS;
@@ -51,10 +55,12 @@ public class ControladorAniadir implements ActionListener {
                 break;
             case "procesador":
                 JDialog ventanaProcesador = new JDialog(ventana, "Añadir Procesador");
-                IngresarProcesador panel = new IngresarProcesador();
-                ventanaProcesador.addWindowListener(new ControladorVentanainsertarProcesador(panel));
+                IngresarProcesador panel = new IngresarProcesador(ventanaProcesador);
                 ControladorAniadirProcesador ctr = new ControladorAniadirProcesador(panel);
+                ventanaProcesador.addWindowListener(new ControladorVentanainsertarProcesador(panel, this));
+
                 panel.controlador(ctr);
+
                 ventanaProcesador.add(panel);
 
                 ventanaProcesador.pack();
@@ -65,17 +71,15 @@ public class ControladorAniadir implements ActionListener {
 
     }
 
-    private void insertarIntert() throws HeadlessException {
-        String insert = "INSERT INTO MOVILES(ID,MARCA,NOMBRE,FOTO,TAMANNO,PESO,PULGADAS,RESOLUCION,ALMACENAMIENTO,RAM,PROCESADOR,HUELLA,ACELEROMETRO,GIROSCOPIO,BATERIA) "
-                + "VALUES (" + ventana.getTxtId() + "," + obtenerIdMarca(ventana.getMarca()) + ",'" + ventana.getTxtNombre() + "','" + ventana.getTxtFoto() + "','"
-                + ventana.getTxtTamanio() + "'," + ventana.getTxtPeso() + "," + ventana.getTxtPulgadas() + ",'" + ventana.getTxtResolucion() + "',"
-                + ventana.getTxtAlmacenamiento() + "," + ventana.getTxtRam() + "," + obtenerIdProcesador(ventana.getcbProcesador()) + "," + ventana.getCbHuella() + ","
-                + ventana.getCbAcelerometro() + "," + ventana.getCbGiroscopio() + "," + ventana.getTxtBateria() + ");";
-        try {
-            bd.realizarInsert(insert);
-            JOptionPane.showMessageDialog(ventana, "Se ha añadido movil correctamente", "Añadido", JOptionPane.INFORMATION_MESSAGE);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(ventana, "No se ha podido insertar movil", "Error", JOptionPane.ERROR_MESSAGE);
+    public void iniciarProcesadores(ConeccionBD bd) throws SQLException {
+        ResultSet resultado;
+        //realizamos la consulta del procesador a la base de datos y guardamos los datos
+        resultado = bd.realizarConsulta(CONSULTA_PRO);
+        //Limpiamos los combobox del procesador
+        ventana.limpiarItems(ventana.getCbProcesador());
+        while (resultado.next()) {
+            //aniadimos el resultado de la consulta a los combobox de procesador
+            ventana.addProcesador(resultado.getString("MODELO"));
         }
     }
 

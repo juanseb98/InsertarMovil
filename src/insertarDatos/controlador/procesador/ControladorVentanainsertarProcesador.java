@@ -1,12 +1,13 @@
-package insertatDatos.controlador;
+package insertarDatos.controlador.procesador;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import insertatDatos.modelo.ConeccionBD;
-import insertatDatos.vista.IngresarProcesador;
+import insertarDatos.controlador.ControladorAniadir;
+import insertarDatos.modelo.ConeccionBD;
+import insertarDatos.vista.IngresarProcesador;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
@@ -20,10 +21,13 @@ import javax.swing.JOptionPane;
 public class ControladorVentanainsertarProcesador extends WindowAdapter {
 
     private final IngresarProcesador ventana;
+    private final ControladorAniadir controlador;
+    private ConeccionBD bd;
     private static final String CONSULTA_ID = "select MAX(ID_PROCESADOR) from PROCESADOR;";
 
-    public ControladorVentanainsertarProcesador(IngresarProcesador vent) {
+    public ControladorVentanainsertarProcesador(IngresarProcesador vent, ControladorAniadir ctr) {
         ventana = vent;
+        controlador = ctr;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class ControladorVentanainsertarProcesador extends WindowAdapter {
 
         ResultSet resultado;
         try {
-            ConeccionBD bd = new ConeccionBD();
+            bd = new ConeccionBD();
             //realizamos una cosulta a la base de datos para obtener el ultimo ID usado
             resultado = bd.realizarConsulta(CONSULTA_ID);
             while (resultado.next()) {
@@ -43,4 +47,14 @@ public class ControladorVentanainsertarProcesador extends WindowAdapter {
             JOptionPane.showMessageDialog(null, "No se pudo realizar la consulta correctamente", "Error Al realizar consulta", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        try {
+            controlador.iniciarProcesadores(bd);
+        } catch (SQLException ex) {
+            //Logger.getLogger(ControladorVentanainsertarProcesador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

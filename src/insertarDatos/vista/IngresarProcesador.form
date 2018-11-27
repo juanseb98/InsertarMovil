@@ -35,8 +35,8 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
-                      <Component id="btInsertar" min="-2" pref="169" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                      <Component id="btInsertar" min="-2" pref="246" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="66" max="32767" attributes="0"/>
@@ -104,7 +104,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btInsertar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Insertar"/>
+        <Property name="text" type="java.lang.String" value="A&#xf1;adir nuevo procesador"/>
       </Properties>
     </Component>
   </SubComponents>

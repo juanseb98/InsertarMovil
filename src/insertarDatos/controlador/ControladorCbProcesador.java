@@ -1,6 +1,6 @@
-package insertatDatos.controlador;
+package insertarDatos.controlador;
 
-import insertatDatos.vista.IngresarDatos;
+import insertarDatos.vista.IngresarDatos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 

@@ -1,4 +1,4 @@
-package insertatDatos.controlador;
+package insertarDatos.controlador;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -6,7 +6,7 @@ package insertatDatos.controlador;
  * and open the template in the editor.
  */
 
-import insertatDatos.vista.IngresarDatos;
+import insertarDatos.vista.IngresarDatos;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
