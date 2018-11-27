@@ -25,6 +25,8 @@ public class IngresarDatos extends javax.swing.JFrame {
      */
     public IngresarDatos() {
         initComponents();
+        txtId.setEnabled(false);
+
         this.addWindowListener(new ControladorVentanainsertar(this));
         marca = new String();
         procesador = new String();

@@ -19,6 +19,7 @@ public class IngresarProcesador extends javax.swing.JPanel {
      */
     public IngresarProcesador() {
         initComponents();
+        txtId.setEnabled(false);
     }
 
 //<---- Getters ---->
