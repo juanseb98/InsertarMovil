@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -38,13 +40,15 @@ public class ControladorAniadirMarca implements ActionListener {
         try {
             if (insertar()) {
                 JOptionPane.showMessageDialog(panel, "Se ha añadido marca correctamente", "Añadido", JOptionPane.INFORMATION_MESSAGE);
-                actualizarID();
-                panel.limpiar();
+                //actualizarID();
+                //panel.limpiar();
                 panel.cerrarVentana();
             }
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(panel, "No se ha podido insertar la nueva marca", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessage(), "Ya creado", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -59,18 +63,23 @@ public class ControladorAniadirMarca implements ActionListener {
 
     }
 
-    private boolean insertar() throws SQLException {
+    private boolean insertar() throws SQLException, Exception {
         boolean correcto = false;
         String prepareInst = "INSERT INTO MARCA(ID_MARCA,NOMBRE) VALUES( ?,  ?);";
         if (obtenerDatos()) {
-            PreparedStatement prepareStament = bd.getPrepareStament(prepareInst);
+            if (!comprobarExistente()) {
+                PreparedStatement prepareStament = bd.getPrepareStament(prepareInst);
 
-            prepareStament.setInt(1, ID);
-            prepareStament.setString(2, NOMBRE);
+                prepareStament.setInt(1, ID);
+                prepareStament.setString(2, NOMBRE);
 
-            prepareStament.executeUpdate();
-            prepareStament.close();
-            correcto = true;
+                prepareStament.executeUpdate();
+                prepareStament.close();
+                correcto = true;
+            } else {
+                throw new Exception("La marca " + NOMBRE + " ya existe");
+            }
+
         }
         return correcto;
     }
@@ -86,6 +95,22 @@ public class ControladorAniadirMarca implements ActionListener {
         }
 
         return datosCorrecto;
+    }
+
+    private boolean comprobarExistente() {
+        boolean existe = false;
+
+        try {
+            ResultSet resultado = bd.realizarConsulta("select NOMBRE from MARCA;");
+            while (resultado.next() && !existe) {
+                if (NOMBRE.equalsIgnoreCase(resultado.getString("NOMBRE"))) {
+                    existe = true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorAniadirMarca.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return existe;
     }
 
 }

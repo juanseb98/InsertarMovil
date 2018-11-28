@@ -5,6 +5,7 @@
  */
 package insertarDatos.controlador.procesador;
 
+import insertarDatos.controlador.marca.ControladorAniadirMarca;
 import insertarDatos.modelo.ConeccionBD;
 import insertarDatos.vista.IngresarProcesador;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,7 +29,9 @@ public class ControladorAniadirProcesador implements ActionListener {
 
     private ConeccionBD bd;
     private IngresarProcesador panel;
+
     private static final String CONSULTA_ID = "select MAX(ID_PROCESADOR) from PROCESADOR;";
+    private static final String INSERTAR_PROCESADOR = "INSERT INTO PROCESADOR(ID_PROCESADOR,MODELO,TIPO,FRECUENCIA) VALUES( ?,  ?,  ?,  ?);";
 
     public ControladorAniadirProcesador(IngresarProcesador panel) {
         bd = new ConeccionBD();
@@ -39,13 +44,15 @@ public class ControladorAniadirProcesador implements ActionListener {
         try {
             if (insertar()) {
                 JOptionPane.showMessageDialog(panel, "Se ha añadido Procesador correctamente", "Añadido", JOptionPane.INFORMATION_MESSAGE);
-                actualizarID();
-                panel.limpiar();
+                //actualizarID();
+                //panel.limpiar();
                 panel.cerrarVentana();
             }
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(panel, "No se ha podido insertar Procesador", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(panel, ex.getMessage(), "Ya creado", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -60,20 +67,23 @@ public class ControladorAniadirProcesador implements ActionListener {
 
     }
 
-    private boolean insertar() throws SQLException {
+    private boolean insertar() throws SQLException, Exception {
         boolean correcto = false;
-        String prepareInst = "INSERT INTO PROCESADOR(ID_PROCESADOR,MODELO,TIPO,FRECUENCIA) VALUES( ?,  ?,  ?,  ?);";
         if (obtenerDatos()) {
-            PreparedStatement prepareStament = bd.getPrepareStament(prepareInst);
+            if (!comprobarExistente()) {
+                PreparedStatement prepareStament = bd.getPrepareStament(INSERTAR_PROCESADOR);
 
-            prepareStament.setInt(1, ID);
-            prepareStament.setString(2, MODELO);
-            prepareStament.setString(3, TIPO);
-            prepareStament.setDouble(4, FRECUANCIA);
+                prepareStament.setInt(1, ID);
+                prepareStament.setString(2, MODELO);
+                prepareStament.setString(3, TIPO);
+                prepareStament.setDouble(4, FRECUANCIA);
 
-            prepareStament.executeUpdate();
-            prepareStament.close();
-            correcto = true;
+                prepareStament.executeUpdate();
+                prepareStament.close();
+                correcto = true;
+            } else {
+                throw new Exception("El procesador " + MODELO + " ya existe");
+            }
         }
         return correcto;
     }
@@ -93,6 +103,22 @@ public class ControladorAniadirProcesador implements ActionListener {
         }
 
         return datosCorrecto;
+    }
+
+    private boolean comprobarExistente() {
+        boolean existe = false;
+
+        try {
+            ResultSet resultado = bd.realizarConsulta("select MODELO from PROCESADOR;");
+            while (resultado.next() && !existe) {
+                if (MODELO.equalsIgnoreCase(resultado.getString("MODELO"))) {
+                    existe = true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorAniadirMarca.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return existe;
     }
 
 }
