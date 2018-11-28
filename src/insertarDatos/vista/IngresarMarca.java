@@ -14,11 +14,8 @@ import javax.swing.JDialog;
  */
 public class IngresarMarca extends javax.swing.JPanel {
 
-    private JDialog contenedor;
+    private final JDialog contenedor;
 
-    /**
-     * Creates new form IngresarProcesador
-     */
     public IngresarMarca(JDialog contenedor) {
         this.contenedor = contenedor;
         initComponents();
