@@ -54,7 +54,6 @@ public class ControladorAniadir implements ActionListener {
                     actualizarID();
                 }
 
-//                insertarIntert();
                 break;
             case "procesador":
                 JDialog ventanaProcesador = new JDialog(ventana, "Añadir Procesador");
@@ -83,6 +82,12 @@ public class ControladorAniadir implements ActionListener {
                 ventanaMarca.pack();
                 ventanaMarca.setModal(true);
                 ventanaMarca.setVisible(true);
+                break;
+            case "imagen":
+                ventana.setverImagen(ventana.getTxtFoto());
+                break;
+            case "cancelar":
+                System.exit(0);
                 break;
         }
 
