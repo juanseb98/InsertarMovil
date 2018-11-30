@@ -6,6 +6,7 @@ import insertarDatos.controlador.ControladorCbMarca;
 import insertarDatos.controlador.ControladorCbProcesador;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
+import javax.swing.JTextField;
 
 /**
  * Pantalla encargada de gestionar la base de datos añadiendo nuevo movil y
@@ -47,9 +48,10 @@ public class IngresarDatos extends javax.swing.JFrame {
         ControladorAniadir controladorComponentes = new ControladorAniadir(this);
         controlador(controladorComponentes);
 
-        BarraMenu mb = new BarraMenu();
+        BarraMenu mb = new BarraMenu(this);
         mb.controlador(controladorComponentes);
         this.setJMenuBar(mb);
+
     }
 
     /**
@@ -325,16 +327,16 @@ public class IngresarDatos extends javax.swing.JFrame {
         getContentPane().add(btNewProcesador, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 350, -1, -1));
 
         btNewMarca.setText("Nueva marca");
-        getContentPane().add(btNewMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, 145, -1));
+        getContentPane().add(btNewMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 145, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 530, -1));
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 530, -1));
 
         btVerImagen.setText("Ver imagen");
-        getContentPane().add(btVerImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 100, -1, -1));
+        getContentPane().add(btVerImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 110, -1, -1));
 
         btCancelar.setText("Cancelar");
         getContentPane().add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 520, 190, -1));
-        getContentPane().add(verImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, -1, -1));
+        getContentPane().add(verImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 140, -1, -1));
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 570, 360, 10));
 
         pack();

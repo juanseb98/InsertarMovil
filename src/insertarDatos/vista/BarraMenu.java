@@ -6,6 +6,10 @@
 package insertarDatos.vista;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -17,18 +21,22 @@ import javax.swing.JMenuItem;
 public class BarraMenu extends JMenuBar {
 
     private JMenu mArchivo, mAyuda;
-    private JMenuItem iSalir, iInsertar;
+    private JMenuItem iSalir, iInsertar, iAyuda;
+    private IngresarDatos principal;
 
-    public BarraMenu() {
+    public BarraMenu(IngresarDatos principal) {
+        this.principal = principal;
 
         initVariables();
         add(mArchivo);
         iSalir.setMnemonic('S');
-        mArchivo.add(iSalir);
         iInsertar.setMnemonic('I');
+        mArchivo.add(iSalir);
         mArchivo.add(iInsertar);
 
         add(mAyuda);
+        iAyuda.setMnemonic('A');
+        mAyuda.add(iAyuda);
 
     }
 
@@ -37,6 +45,8 @@ public class BarraMenu extends JMenuBar {
         iSalir.setActionCommand("cancelar");
         iInsertar.addActionListener(crt);
         iInsertar.setActionCommand("insertar");
+        iAyuda.addActionListener(crt);
+        iAyuda.setActionCommand("ayuda");
 
     }
 
@@ -45,6 +55,12 @@ public class BarraMenu extends JMenuBar {
         mAyuda = new JMenu("Ayuda");
         iInsertar = new JMenuItem("Insertar");
         iSalir = new JMenuItem("Salir");
+        iAyuda = new JMenuItem("Ayuda");
+    }
+    //Método llamado al cargar la ayuda.
+
+    public JMenuItem getJMenuItem() {
+        return iAyuda;
     }
 
 }
